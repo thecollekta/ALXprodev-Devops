@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# URL for Pikachu data
+url="https://pokeapi.co/api/v2/pokemon/pikachu"
+
+# Attempt to fetch data and handle outcomes
+if curl --fail -s -o data.json "$url" 2> errors.txt; then
+    rm -f errors.txt # Remove error file on success
+else
+    rm -f data.json # Remove data file on failure
+fi
