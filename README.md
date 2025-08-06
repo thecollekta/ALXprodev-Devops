@@ -4,6 +4,7 @@ A set of shell scripts to automate:
 
 1. Fetching Pokémon data from PokeAPI (`apiAutomation-0x00`)
 2. Extracting key details from the response (`data_extraction_automation-0x01`)
+3. Batch processing of Pokémons into separate JSON files in a directory (`batchProcessing-0x02`)
 
 ---
 
@@ -21,7 +22,15 @@ A set of shell scripts to automate:
    - Parses `data.json` using `jq`
    - Extracts name, height, weight, and primary type
    - Formats output:  
-     `Pikachu is of type Electric, weighs 6kg, and is 0.4m tall.`
+    `Pikachu is of type Electric, weighs 6kg, and is 0.4m tall.`
+
+3. `batchProcessing-0x02`:
+   - Processes: Bulbasaur, Ivysaur, Venusaur, Charmander, Charmeleon
+   - Creates pokemon_data/ directory
+   - Saves each Pokémon's data to separate JSON files
+   - 1-second delay between requests prevents rate limiting
+   - Provides success/failure feedback for each request
+   - Retrieves data for multiple Pokémon with API rate limit protection.
 
 ---
 
@@ -40,8 +49,8 @@ No installation required. Just download the script:
 
 ```bash
 # Download scripts
-wget https://raw.github.com/yourusername/ALXprodev-Devops/main/Advanced_shell/apiAutomation-0x00
-wget https://raw.github.com/yourusername/ALXprodev-Devops/main/Advanced_shell/data_extraction_automation-0x01
+wget https://github.com/yourusername/ALXprodev-Devops/main/Advanced_shell/apiAutomation-0x00
+wget https://github.com/yourusername/ALXprodev-Devops/main/Advanced_shell/data_extraction_automation-0x01
 ```
 
 ---
@@ -63,6 +72,9 @@ wget https://raw.github.com/yourusername/ALXprodev-Devops/main/Advanced_shell/da
 
     # Extract Pokémon Data
     ./data_extraction_automation-0x01
+
+    # Batch Processing
+    ./batchProcessing-0x02
     ```
 
 3. Check the output:
@@ -106,6 +118,19 @@ Pikachu is of type , weighs 0kg, and is 0.0m tall.
 Electric is of type , weighs 0kg, and is 0.0m tall.
 ```
 
+```bash
+$ ./batchProcessing-0x02
+Fetching data for bulbasaur...
+Saved data to pokemon_data/bulbasaur.json
+Fetching data for ivysaur...
+Saved data to pokemon_data/ivysaur.json
+Saved data to pokemon_data/venusaur.json
+Fetching data for charmander...
+Saved data to pokemon_data/charmander.json
+Fetching data for charmeleon...
+Saved data to pokemon_data/charmeleon.json
+```
+
 ---
 
 ## Error Handling
@@ -120,6 +145,9 @@ cat errors.txt
 - `data_extraction_automation-0x01`:
   - Fails silently if data.json missing
   - Outputs nothing if required fields absent
+- `batchProcessing-0x02`:
+  - Failed requests logged to stderr
+  - Script continues processing next Pokémon after failures
 
 ---
 
