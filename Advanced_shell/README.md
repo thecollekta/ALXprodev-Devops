@@ -44,6 +44,13 @@ A set of shell scripts to automate:
     - Calculates and displays average height and weight
     - Handles missing or empty directories gracefully
 
+5. `batchProcessing-0x04`:
+    - Downloads Pokémon data in parallel
+    - Configurable concurrency level
+    - Progress tracking and status updates
+    - Error handling and validation
+    - Summary of download results
+
 ---
 
 ## Prerequisites/Requirements
@@ -93,6 +100,9 @@ wget https://github.com/yourusername/ALXprodev-Devops/main/Advanced_shell/data_e
 
     # Error Handling
     ./batchProcessing-0x02
+
+    # Parallel Processing
+    ./batchProcessing-0x04
     ```
 
 3. Check the output:
@@ -150,7 +160,7 @@ Saved data to pokemon_data/charmeleon.json
 ```
 
 ```bash
-./summaryData-0x03
+$ ./summaryData-0x03
 CSV Report generated at: pokemon_report.csv
 
 Name,Height (m),Weight (kg)
@@ -164,7 +174,7 @@ Average Weight: 29.48 kg
 ```
 
 ```bash
-./batchProcessing-0x02
+$ ./batchProcessing-0x02
 Fetching data for bulbasaur...
 Saved data to pokemon_data/bulbasaur.json
 Fetching data for ivysaur...
@@ -175,6 +185,20 @@ Fetching data for charmander...
 Saved data to pokemon_data/charmander.json
 Fetching data for charmeleon...
 Saved data to pokemon_data/charmeleon.json
+```
+
+```bash
+$ ./batchProcessing-0x04
+Fetching data for bulbasaur...
+Fetching data for ivysaur...
+Fetching data for venusaur...
+Fetching data for charmander...
+Fetching data for charmeleon...
+Saved data to pokemon_data/venusaur.json
+Saved data to pokemon_data/charmander.json
+Saved data to pokemon_data/charmeleon.json
+Saved data to pokemon_data/bulbasaur.json
+All Pokémon data fetched successfully!
 ```
 
 ---

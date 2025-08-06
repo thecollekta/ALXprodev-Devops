@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Create directory for storing Pokémon data
+mkdir -p pokemon_data
+
+# List of Pokémon to fetch
+pokemon_list=("bulbasaur" "ivysaur" "venusaur" "charmander" "charmeleon")
+
+# Initialize process counter
+declare -a pids
+
+# Function to fetch Pokémon data
+fetch_pokemon() {
+    local pokemon=$1
+    echo "Fetching data for $pokemon..."
+    
+    # Make API request with error handling
+    curl -s -S --fail "https://pokeapi.co/api/v2/pokemon/$pokemon" -o "pokemon_data/$pokemon.json" 2> "pokemon_data/${pokemon}_error.txt"
+    
+    # Check if request succeeded
+    if [ $? -eq 0 ]; then
+        echo "Saved data to pokemon_data/$pokemon.json"
+    else
+        echo "Error fetching $pokemon data" >&2
+    fi
+}
+
+# Launch all requests in parallel
+for pokemon in "${pokemon_list[@]}"; do
+    fetch_pokemon "$pokemon" &
+    pids+=($!)  # Store background process ID
+done
+
+# Wait for all background processes to complete
+for pid in "${pids[@]}"; do
+    wait "$pid"
+done
+
+echo "All Pokémon data fetched successfully!"
