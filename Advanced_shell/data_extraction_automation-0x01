@@ -2,18 +2,25 @@
 
 # Extract raw data using jq
 raw_data=$(jq -r '
-  "\(.name) 
-   \(.height*0.1) 
-   \(.weight*0.1) 
-   \(.types[0].type.name)" 
+  .name + " " +
+  (.height|tostring) + " " +
+  (.weight|tostring) + " " +
+  .types[0].type.name
 ' data.json)
 
-# Format using awk and sed
-echo "$raw_data" | awk '{
-  printf "%s %s %s %s", $1, $2, $3, $4
-}' | sed -E '
-  s/^([a-z])/\U\1/
-  s/ ([a-z])/ \U\1/g
-' | awk '{
-  printf "%s is of type %s, weighs %.0fkg, and is %.1fm tall.\n", $1, $4, $3, $2
-}'
+# Extract individual values
+name=$(echo "$raw_data" | awk '{print $1}')
+height=$(echo "$raw_data" | awk '{print $2}')
+weight=$(echo "$raw_data" | awk '{print $3}')
+type=$(echo "$raw_data" | awk '{print $4}')
+
+# Convert units and format values
+formatted_height=$(awk "BEGIN {printf \"%.1f\", $height * 0.1}")
+formatted_weight=$(awk "BEGIN {printf \"%.0f\", $weight * 0.1}")
+
+# Capitalize name and type using sed
+name=$(echo "$name" | sed 's/^\(.\)/\U\1/')
+type=$(echo "$type" | sed 's/^\(.\)/\U\1/')
+
+# Generate final output
+echo "$name is of type $type, weighs ${formatted_weight}kg, and is ${formatted_height}m tall."
