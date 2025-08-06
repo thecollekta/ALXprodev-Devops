@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Create output directory if needed
+mkdir -p pokemon_data
+
+# Output CSV file
+csv_file="pokemon_report.csv"
+
+# Initialize CSV with header
+echo "Name,Height (m),Weight (kg)" > "$csv_file"
+
+# Initialize total counters
+total_height=0
+total_weight=0
+count=0
+
+# Process each Pokémon JSON file
+for file in pokemon_data/*.json; do
+    # Skip if no files found
+    [ -f "$file" ] || continue
+    
+    # Extract data using jq
+    name=$(jq -r '.name' "$file")
+    height=$(jq -r '.height' "$file")
+    weight=$(jq -r '.weight' "$file")
+    
+    # Convert to metric units
+    height_m=$(awk "BEGIN {printf \"%.1f\", $height * 0.1}")
+    weight_kg=$(awk "BEGIN {printf \"%.1f\", $weight * 0.1}")
+    
+    # Add to CSV
+    echo "$(echo $name | awk '{print toupper(substr($0,1,1)) substr($0,2)}'),$height_m,$weight_kg" >> "$csv_file"
+    
+    # Accumulate totals
+    total_height=$(awk "BEGIN {print $total_height + $height_m}")
+    total_weight=$(awk "BEGIN {print $total_weight + $weight_kg}")
+    count=$((count + 1))
+done
+
+# Calculate averages using awk
+avg_height=$(awk "BEGIN {printf \"%.2f\", $total_height / $count}")
+avg_weight=$(awk "BEGIN {printf \"%.2f\", $total_weight / $count}")
+
+# Display report
+echo "CSV Report generated at: $csv_file"
+echo ""
+cat "$csv_file"
+echo ""
+echo "Average Height: $avg_height m"
+echo "Average Weight: $avg_weight kg"

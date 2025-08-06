@@ -4,7 +4,7 @@ A set of shell scripts to automate:
 
 1. Fetching Pokémon data from PokeAPI (`apiAutomation-0x00`)
 2. Extracting key details from the response (`data_extraction_automation-0x01`)
-3. Batch processing of Pokémons into separate JSON files in a directory (`batchProcessing-0x02`)
+3. Batch processing script fetches data for multiple Pokémon and saves each to a separate JSON file (`batchProcessing-0x02`)
 
 ---
 
@@ -13,24 +13,30 @@ A set of shell scripts to automate:
 ### Scripts
 
 1. `apiAutomation-0x00`:
-   - Fetches Pikachu data from Pokémon API
-   - Saves response to `data.json` on success
-   - Logs errors to `errors.txt` on failure
-   - Cleans up stale files automatically
+    - Fetches Pikachu data from Pokémon API
+    - Saves response to `data.json` on success
+    - Logs errors to `errors.txt` on failure
+    - Cleans up stale files automatically
 
 2. `data_extraction_automation-0x01`:
-   - Parses `data.json` using `jq`
-   - Extracts name, height, weight, and primary type
-   - Formats output:  
+    - Parses `data.json` using `jq`
+    - Extracts name, height, weight, and primary type
+    - Formats output:  
     `Pikachu is of type Electric, weighs 6kg, and is 0.4m tall.`
 
 3. `batchProcessing-0x02`:
-   - Processes: Bulbasaur, Ivysaur, Venusaur, Charmander, Charmeleon
-   - Creates pokemon_data/ directory
-   - Saves each Pokémon's data to separate JSON files
-   - 1-second delay between requests prevents rate limiting
-   - Provides success/failure feedback for each request
-   - Retrieves data for multiple Pokémon with API rate limit protection.
+    - Fetches data for multiple Pokémon in sequence
+    - Creates a `pokemon_data` directory for output
+    - Includes rate limiting to prevent API abuse
+    - Provides clear status messages
+    - Handles errors gracefully
+
+4. `summaryData-0x03`:
+    - Reads all JSON files from the `pokemon_data` directory
+    - Extracts name, height, and weight for each Pokémon
+    - Generates a CSV file with the collected data
+    - Calculates and displays average height and weight
+    - Handles missing or empty directories gracefully
 
 ---
 
@@ -61,7 +67,7 @@ wget https://github.com/yourusername/ALXprodev-Devops/main/Advanced_shell/data_e
 
     ```bash
     # Make executable
-    chmod +x apiAutomation-0x00 data_extraction_automation-0x01
+    chmod +x apiAutomation-0x00 data_extraction_automation-0x01 batchProcessing-0x02 summaryData-0x03
     ```
 
 2. Run the script:
@@ -75,6 +81,9 @@ wget https://github.com/yourusername/ALXprodev-Devops/main/Advanced_shell/data_e
 
     # Batch Processing
     ./batchProcessing-0x02
+
+    # Summary Data
+    ./summaryData-0x03
     ```
 
 3. Check the output:
@@ -129,6 +138,20 @@ Fetching data for charmander...
 Saved data to pokemon_data/charmander.json
 Fetching data for charmeleon...
 Saved data to pokemon_data/charmeleon.json
+```
+
+```bash
+./summaryData-0x03
+CSV Report generated at: pokemon_report.csv
+
+Name,Height (m),Weight (kg)
+Bulbasaur,0.7,6.9
+Charmander,0.6,8.5
+Ivysaur,1.0,13.0
+Venusaur,2.0,100.0
+
+Average Height: 1.08 m
+Average Weight: 29.48 kg
 ```
 
 ---
