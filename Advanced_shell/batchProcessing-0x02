@@ -4,23 +4,20 @@
 mkdir -p pokemon_data
 
 # List of Pokémon to fetch
-pokemon_list=("Bulbasaur" "Ivysaur" "Venusaur" "Charmander" "Charmeleon")
+pokemon_list=("bulbasaur" "ivysaur" "venusaur" "charmander" "charmeleon")
 
 # Loop through each Pokémon
 for pokemon in "${pokemon_list[@]}"; do
-    # Convert to lowercase for filename consistency
-    pokemon_lower=$(echo "$pokemon" | tr '[:upper:]' '[:lower:]')
-    
-    echo "Fetching data for $pokemon_lower..."
+    echo "Fetching data for $pokemon..."
     
     # Make API request with error handling
-    curl -s -S --fail "https://pokeapi.co/api/v2/pokemon/$pokemon_lower" -o "pokemon_data/$pokemon_lower.json" 2>/dev/null
+    curl -s -S --fail "https://pokeapi.co/api/v2/pokemon/$pokemon" -o "pokemon_data/$pokemon.json" 2>/dev/null
     
     # Check if request succeeded
     if [ $? -eq 0 ]; then
-        echo "Saved data to pokemon_data/$pokemon_lower.json"
+        echo "Saved data to pokemon_data/$pokemon.json"
     else
-        echo "Error fetching $pokemon_lower data" >&2
+        echo "Error fetching $pokemon data" >&2
     fi
     
     # Add delay to prevent rate-limiting
