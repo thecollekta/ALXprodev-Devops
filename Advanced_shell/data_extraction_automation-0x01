@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Extract data using jq and format with awk
+jq -r '
+  "\(.name) 
+   \(.height * 0.1) 
+   \(.weight * 0.1) 
+   \(.types[0].type.name)" 
+' data.json | awk '{
+  # Capitalize name and type
+  name = $1
+  sub(name, toupper(substr(name,1,1)) substr(name,2), name)
+  
+  type = $4
+  sub(type, toupper(substr(type,1,1)) substr(type,2), type)
+  
+  # Format output
+  printf "%s is of type %s, weighs %.0fkg, and is %.1fm tall.\n", 
+         name, type, $3, $2
+}'

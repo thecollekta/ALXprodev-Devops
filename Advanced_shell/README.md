@@ -1,17 +1,27 @@
 # Pokémon API Request Automation
 
-A shell script to automate fetching Pokémon data from the PokeAPI and handling the response.
+A set of shell scripts to automate:
+
+1. Fetching Pokémon data from PokeAPI (`apiAutomation-0x00`)
+2. Extracting key details from the response (`data_extraction_automation-0x01`)
 
 ---
 
 ## Features/Description
 
-This project contains a Bash script that:
+### Scripts
 
-- Makes an API request to fetch Pikachu's data from the Pokémon API
-- Saves successful responses to `data.json`
-- Logs errors to `errors.txt` if the request fails
-- Includes proper cleanup of stale files
+1. `apiAutomation-0x00`:
+   - Fetches Pikachu data from Pokémon API
+   - Saves response to `data.json` on success
+   - Logs errors to `errors.txt` on failure
+   - Cleans up stale files automatically
+
+2. `data_extraction_automation-0x01`:
+   - Parses `data.json` using `jq`
+   - Extracts name, height, weight, and primary type
+   - Formats output:  
+     `Pikachu is of type Electric, weighs 6kg, and is 0.4m tall.`
 
 ---
 
@@ -19,6 +29,7 @@ This project contains a Bash script that:
 
 - Bash shell
 - `curl` command-line tool
+- `jq` (for JSON parsing)
 - Internet connection
 
 ---
@@ -28,7 +39,9 @@ This project contains a Bash script that:
 No installation required. Just download the script:
 
 ```bash
-wget https://raw.githubusercontent.com/yourusername/ALXprodev-Devops/main/Advanced_shell/apiAutomation-0x00
+# Download scripts
+wget https://raw.github.com/yourusername/ALXprodev-Devops/main/Advanced_shell/apiAutomation-0x00
+wget https://raw.github.com/yourusername/ALXprodev-Devops/main/Advanced_shell/data_extraction_automation-0x01
 ```
 
 ---
@@ -38,13 +51,18 @@ wget https://raw.githubusercontent.com/yourusername/ALXprodev-Devops/main/Advanc
 1. Make the script executable:
 
     ```bash
-    chmod +x apiAutomation-0x00
+    # Make executable
+    chmod +x apiAutomation-0x00 data_extraction_automation-0x01
     ```
 
 2. Run the script:
 
     ```bash
+    # Fetch Data
     ./apiAutomation-0x00
+
+    # Extract Pokémon Data
+    ./data_extraction_automation-0x01
     ```
 
 3. Check the output:
@@ -66,8 +84,8 @@ wget https://raw.githubusercontent.com/yourusername/ALXprodev-Devops/main/Advanc
 ```
 
 ```json
-Successfully retrieved Pikachu data
-Data saved to data.json
+// Successfully retrieved Pikachu data
+// Data saved to data.json
 {
   "abilities": [
     {
@@ -80,15 +98,28 @@ Data saved to data.json
     },
 ```
 
+```bash
+$ ./data_extraction_automation-0x01
+Pikachu is of type , weighs 0kg, and is 0.0m tall.
+0.4 is of type , weighs 0kg, and is 0.0m tall.
+6 is of type , weighs 0kg, and is 0.0m tall.
+Electric is of type , weighs 0kg, and is 0.0m tall.
+```
+
 ---
 
 ## Error Handling
 
-If the API request fails, check errors.txt for details:
+If the API request fails, check `errors.txt` for details:
 
 ```bash
 cat errors.txt
 ```
+
+- `apiAutomation-0x00`: Errors saved to errors.txt
+- `data_extraction_automation-0x01`:
+  - Fails silently if data.json missing
+  - Outputs nothing if required fields absent
 
 ---
 
