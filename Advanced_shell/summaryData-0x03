@@ -28,6 +28,9 @@ for file in pokemon_data/*.json; do
     height_m=$(awk "BEGIN {printf \"%.1f\", $height * 0.1}")
     weight_kg=$(awk "BEGIN {printf \"%.1f\", $weight * 0.1}")
     
+    # Capitalize first letter using sed
+    capitalized_name=$(echo "$name" | sed 's/^\(.\)/\U\1/')
+    
     # Add to CSV
     echo "$(echo $name | awk '{print toupper(substr($0,1,1)) substr($0,2)}'),$height_m,$weight_kg" >> "$csv_file"
     
