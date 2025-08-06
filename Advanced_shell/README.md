@@ -23,6 +23,12 @@ A set of shell scripts to automate:
     - Extracts name, height, weight, and primary type
     - Formats output:  
     `Pikachu is of type Electric, weighs 6kg, and is 0.4m tall.`
+    - Enhanced Error Handling:
+      - Implements 3 retry attempts for failed API requests
+      - 1-second delay between retries
+      - Detailed error diagnostics stored in `errors.txt`
+      - Clear status messages for each retry attempt
+      - Final failure message after 3 unsuccessful attempts
 
 3. `batchProcessing-0x02`:
     - Fetches data for multiple Pokémon in sequence
@@ -84,6 +90,9 @@ wget https://github.com/yourusername/ALXprodev-Devops/main/Advanced_shell/data_e
 
     # Summary Data
     ./summaryData-0x03
+
+    # Error Handling
+    ./batchProcessing-0x02
     ```
 
 3. Check the output:
@@ -152,6 +161,20 @@ Venusaur,2.0,100.0
 
 Average Height: 1.08 m
 Average Weight: 29.48 kg
+```
+
+```bash
+./batchProcessing-0x02
+Fetching data for bulbasaur...
+Saved data to pokemon_data/bulbasaur.json
+Fetching data for ivysaur...
+Saved data to pokemon_data/ivysaur.json
+Fetching data for venusaur...
+Saved data to pokemon_data/venusaur.json
+Fetching data for charmander...
+Saved data to pokemon_data/charmander.json
+Fetching data for charmeleon...
+Saved data to pokemon_data/charmeleon.json
 ```
 
 ---
