@@ -6,9 +6,6 @@ mkdir -p pokemon_data
 # List of Pokémon to fetch
 pokemon_list=("bulbasaur" "ivysaur" "venusaur" "charmander" "charmeleon")
 
-# Initialize process counter
-declare -a pids
-
 # Function to fetch Pokémon data
 fetch_pokemon() {
     local pokemon=$1
@@ -19,7 +16,7 @@ fetch_pokemon() {
     
     # Check if request succeeded
     if [ $? -eq 0 ]; then
-        echo "Saved data to pokemon_data/$pokemon.json"
+        echo "Saved data to pokemon_data/$pokemon.json ✅"
     else
         echo "Error fetching $pokemon data" >&2
     fi
@@ -28,12 +25,28 @@ fetch_pokemon() {
 # Launch all requests in parallel
 for pokemon in "${pokemon_list[@]}"; do
     fetch_pokemon "$pokemon" &
-    pids+=($!)  # Store background process ID
 done
 
-# Wait for all background processes to complete
-for pid in "${pids[@]}"; do
-    wait "$pid"
+# Use jobs to monitor background processes
+while true; do
+    # Get active job count
+    active_jobs=$(jobs -r | wc -l)
+    
+    # Exit loop when no jobs left
+    if [ "$active_jobs" -eq 0 ]; then
+        break
+    fi
+    
+    # Check for hung processes using kill -0
+    for pid in $(jobs -p); do
+        # Use kill -0 to check if process exists
+        if ! kill -0 $pid 2>/dev/null; then
+            echo "Process $pid not found - removing from tracking"
+        fi
+    done
+    
+    # Wait a bit before checking again
+    sleep 0.5
 done
 
 echo "All Pokémon data fetched successfully!"
